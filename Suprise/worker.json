@@ -1,0 +1,27 @@
+let cycleCount = 0;
+
+function runHeavyLoop() {
+    let finalNumber = 0;
+    let squareRoot = 0;
+
+    // Heavy calculations block
+    for (let i = 0; i < 100000000; i++) {
+        finalNumber = Math.floor(Math.random() * 1000) + 1;
+        squareRoot = Math.sqrt(finalNumber);
+    }
+
+    cycleCount++;
+
+    // Push calculation metrics up to the DOM interface thread
+    postMessage({
+        cycleCount: cycleCount,
+        finalNumber: finalNumber,
+        squareRoot: squareRoot.toFixed(2)
+    });
+
+    // Triggers the next iteration sequence immediately
+    setTimeout(runHeavyLoop, 0);
+}
+
+// Fire calculation cycle loop instantly on load
+runHeavyLoop();

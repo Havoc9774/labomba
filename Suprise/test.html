@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LA BOMBA</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #111;
+      color: white;
+      font-family: sans-serif; 
+      text-align: center; 
+      margin-top: 50px;
+    }
+    .float-img {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    
+    /* Access Panel Styling */
+    #access-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(17, 17, 17, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .panel-box {
+      background: #222;
+      padding: 30px;
+      border-radius: 8px;
+      border: 2px solid #ff0055;
+      box-shadow: 0 0 20px rgba(255, 0, 85, 0.2);
+    }
+    .panel-box input {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      margin-right: 10px;
+      outline: none;
+    }
+    .panel-box button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #ff0055;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .panel-box button:hover {
+      background: #ff3377;
+    }
+    #error-msg {
+      color: #ff3333;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+  
+  <script>
+    // Access Panel Logic
+    function checkPassword() {
+      const password = document.getElementById("password-input").value;
+      const correctPassword = "gfudgsfiugsduhgfuerwy"; // Change this to your desired password
+      
+      if (password === correctPassword) {
+        document.getElementById("access-overlay").style.display = "none";
+        startBomba(); // Starts your original code execution
+      } else {
+        document.getElementById("error-msg").innerText = "Access Denied. Incorrect Password.";
+      }
+    }
+
+    // Original Code Setup
+    const POPUP_COUNT = 35; 
+
+    const images = ["icon.png", "png.png", "png2.png", "png3.png", "png4.png", "png5.png", "png6.png", "png7.png", "png8.png", "png9.png", "png10.png", "png11.png", "png12.png", "png13.png", "png14.png", "png15.png", "png16.png", "png17.png", "png18.png", "png19.png", "png20.png", "png21.png", "png22.png", "png23.png","png24.png","png25.png","png26.png","png27.png","png28.png","png29.png","png30.png","png31.png","png32.png","png33.png","png34.png","png35.png","png36.png","png37.png"];
+    const floatingImages = [];
+
+    class Bouncer {
+      constructor(img) {
+        this.el = img;
+        this.size = Math.random() * 100 + 50;
+        this.x = Math.random() * (window.innerWidth - this.size);
+        this.y = Math.random() * (window.innerHeight - this.size);
+        this.el.style.width = this.size + "px";
+        
+        this.dx = (Math.random() - 0.5) * 5; 
+        this.dy = (Math.random() - 0.5) * 5; 
+        this.rotation = Math.random() * 700;
+        this.rotationSpeed = (Math.random() - 0.5) * 5; 
+        this.update();
+      }
+
+      update() {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.rotation += this.rotationSpeed;
+
+        if (this.x <= 0 || this.x + this.size >= window.innerWidth) this.dx *= -1;
+        if (this.y <= 0 || this.y + this.size >= window.innerHeight) this.dy *= -1;
+
+        this.x = Math.max(0, Math.min(this.x, window.innerWidth - this.size));
+        this.y = Math.max(0, Math.min(this.y, window.innerHeight - this.size));
+
+        this.el.style.transform = `translate(${this.x}px, ${this.y}px) rotate(${this.rotation}deg)`;
+      }
+    }
+
+    // Wrapped your initializing script inside this function
+    function startBomba() {
+      for (let i = 0; i < POPUP_COUNT; i++) {
+        const img = document.createElement("img");
+        img.src = images[Math.floor(Math.random() * images.length)];
+        img.classList.add("float-img");
+        document.body.appendChild(img);
+        floatingImages.push(new Bouncer(img));
+      }
+
+      setInterval(() => {
+        floatingImages.forEach(b => b.update());
+      }, 16);
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Access Panel Overlay -->
+  <div id="access-overlay">
+    <div class="panel-box">
+      <h2>ENTER ACCESS PASSWORD</h2>
+      <input type="password" id="password-input" placeholder="Password" onkeydown="if(event.key === 'Enter') checkPassword()">
+      <button onclick="checkPassword()">Unlock</button>
+      <div id="error-msg"></div>
+    </div>
+  </div>
+
+  <h1>LA BOMBA ACTIVE</h1>
+
+</body>
+</html>
+

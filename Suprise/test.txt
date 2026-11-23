@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LA BOMBA</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #111;
+      color: white;
+      font-family: sans-serif; 
+      text-align: center; 
+      margin-top: 50px;
+    }
+    .float-img {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      transition: transform 0.1s linear;
+    }
+  </style>
+  
+  <script>
+    const POPUP_COUNT = 35; 
+
+    const images = ["icon.png", "png.png", "png2.png", "png3.png", "png4.png", "png5.png", "png6.png", "png7.png", "png8.png", "png9.png", "png10.png", "png11.png", "png12.png", "png13.png", "png14.png", "png15.png", "png16.png", "png17.png", "png18.png", "png19.png", "png20.png", "png21.png", "png22.png", "png23.png","png24.png","png25.png","png26.png","png27.png","png28.png","png29.png","png30.png","png31.png","png32.png","png33.png","png34.png","png35.png","png36.png","png37.png"];
+    const floatingImages = [];
+    
+    // Chaos Control State
+    let chaosMuted = false;
+    let inputBuffer = "";
+    const SECRET_CODE = "control";
+
+    class Bouncer {
+      constructor(img) {
+        this.el = img;
+        this.size = Math.random() * 100 + 50;
+        this.x = Math.random() * (window.innerWidth - this.size);
+        this.y = Math.random() * (window.innerHeight - this.size);
+        this.el.style.width = this.size + "px";
+        
+        this.dx = (Math.random() - 0.5) * 5; 
+        this.dy = (Math.random() - 0.5) * 5; 
+        this.rotation = Math.random() * 700;
+        this.rotationSpeed = (Math.random() - 0.5) * 5; 
+        this.update();
+      }
+
+      update() {
+        if (chaosMuted) return;
+
+        this.x += this.dx;
+        this.y += this.dy;
+        this.rotation += this.rotationSpeed;
+
+        if (this.x <= 0 || this.x + this.size >= window.innerWidth) this.dx *= -1;
+        if (this.y <= 0 || this.y + this.size >= window.innerHeight) this.dy *= -1;
+
+        this.x = Math.max(0, Math.min(this.x, window.innerWidth - this.size));
+        this.y = Math.max(0, Math.min(this.y, window.innerHeight - this.size));
+
+        this.el.style.transform = `translate(${this.x}px, ${this.y}px) rotate(${this.rotation}deg)`;
+      }
+    }
+
+    // Hidden Keyboard Listener
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        chaosMuted = true;
+        floatingImages.forEach(b => b.el.remove());
+        floatingImages.length = 0;
+        return;
+      }
+      
+      inputBuffer += e.key.toLowerCase();
+      if (inputBuffer.endsWith(SECRET_CODE)) {
+        chaosMuted = !chaosMuted;
+        inputBuffer = "";
+      }
+    });
+
+    function init() {
+      for(let i = 0; i < POPUP_COUNT; i++) {
+        const img = document.createElement("img");
+        img.src = images[Math.floor(Math.random() * images.length)];
+        img.className = "float-img";
+        document.body.appendChild(img);
+        floatingImages.push(new Bouncer(img));
+      }
+
+      function animate() {
+        floatingImages.forEach(bouncer => bouncer.update());
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    window.onload = init;
+  </script>
+</head>
+<body>
+  <h1>LA BOMBA</h1>
+</body>
+</html>
